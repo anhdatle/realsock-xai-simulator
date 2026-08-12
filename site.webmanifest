@@ -1,0 +1,9 @@
+{
+  "name": "Realsock XAI Simulator",
+  "short_name": "Realsock",
+  "start_url": "./explainable-ai-demo.html",
+  "display": "standalone",
+  "background_color": "#080b10",
+  "theme_color": "#080b10",
+  "description": "Explainable supply chain to housing market scenario simulator."
+}

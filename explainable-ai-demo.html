@@ -1,0 +1,2472 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#080b10" />
+    <link rel="manifest" href="site.webmanifest" />
+    <title>Realsock - XAI Supply Chain-to-Housing Market Simulator</title>
+    <style>
+      :root {
+        --bg: #080b10;
+        --surface: #11161d;
+        --surface2: #171d25;
+        --line: #2a3440;
+        --text: #f2f5f7;
+        --muted: #99a6b4;
+        --teal: #49d2b8;
+        --amber: #f7b955;
+        --coral: #f37272;
+        --blue: #7aaaf7;
+        --lime: #b6dc63;
+        --violet: #b498ec;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(
+          ellipse at 82% -10%,
+          #263542 0,
+          #080b10 42%
+        );
+        background-attachment: fixed;
+        color: var(--text);
+        font:
+          14px/1.4 Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      .shell {
+        max-width: 1500px;
+        margin: auto;
+        padding: 20px;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: center;
+        border-bottom: 1px solid #3a4652;
+        padding: 0 0 16px;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(145deg, #253542, #111b24);
+        border: 1px solid #536675;
+        color: var(--teal);
+        font-weight: 900;
+      }
+      .eyebrow {
+        color: var(--teal);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .top h1 {
+        font-size: 21px;
+        letter-spacing: -0.03em;
+        margin: 2px 0;
+      }
+      .top p {
+        color: var(--muted);
+        margin: 0;
+        font-size: 11px;
+      }
+      .status {
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        color: var(--teal);
+        border: 1px solid #416b69;
+        border-radius: 4px;
+        padding: 6px 9px;
+      }
+      .status:before {
+        content: "";
+        display: inline-block;
+        background: var(--teal);
+        box-shadow: 0 0 8px var(--teal);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin: 0 5px 1px 0;
+      }
+      .headerActions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .shareBtn {
+        appearance: none;
+        cursor: pointer;
+        padding: 6px 9px;
+        color: #d7e2e7;
+        background: #151e27;
+        border: 1px solid #435564;
+        border-radius: 3px;
+        font: 9px/1 inherit;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .shareBtn:hover {
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+      .ticker {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow: auto;
+        margin: 12px 0 0;
+        padding: 8px 10px;
+        background: #0e141b;
+        border: 1px solid #2d3945;
+        border-left: 3px solid var(--coral);
+        color: #8594a2;
+        font-size: 9px;
+        letter-spacing: 0.07em;
+        white-space: nowrap;
+      }
+      .ticker b {
+        color: var(--amber);
+        font-size: 10px;
+        letter-spacing: 0.02em;
+        margin-right: 7px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 12px;
+        margin: 14px 0;
+      }
+      .card {
+        background: linear-gradient(145deg, #171d25, #11161d);
+        border: 1px solid #303b47;
+        border-radius: 6px;
+        padding: 14px;
+        box-shadow: 0 15px 30px #0000001d;
+      }
+      .card h2 {
+        font-size: 12px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 10px;
+        margin: 3px 0 11px;
+      }
+      .case {
+        background: linear-gradient(90deg, #152530, #111b24);
+        border: 1px solid #344c59;
+        border-radius: 4px;
+        padding: 11px;
+      }
+      .case b {
+        font-size: 13px;
+      }
+      .case p {
+        font-size: 11px;
+        color: #c2d8de;
+        margin: 4px 0 0;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .control {
+        background: #101821;
+        border: 1px solid #2c3945;
+        border-radius: 4px;
+        padding: 9px;
+      }
+      .control small {
+        display: block;
+        font-size: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #7b9aa9;
+      }
+      .control b {
+        display: block;
+        font-size: 16px;
+        margin-top: 2px;
+      }
+      .control .amber {
+        color: var(--amber);
+      }
+      .control .coral {
+        color: var(--coral);
+      }
+      .control .lime {
+        color: var(--lime);
+      }
+      .viewbar {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 11px;
+      }
+      .chip {
+        border: 1px solid #384956;
+        background: #121a23;
+        color: #c2ccd5;
+        padding: 7px 9px;
+        border-radius: 3px;
+        font: 10px inherit;
+        cursor: pointer;
+      }
+      .chip.active {
+        border-color: #4a9c90;
+        background: #193a3a;
+        color: var(--teal);
+      }
+      .mapCard {
+        padding: 0;
+        overflow: hidden;
+        border-top: 2px solid #596a78;
+      }
+      .mapHead {
+        padding: 13px 13px 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 9px;
+        align-items: center;
+      }
+      .mapHead h2 {
+        font-size: 13px;
+        margin: 0;
+      }
+      .legend {
+        font-size: 9px;
+        color: #9db7c2;
+      }
+      .legend i {
+        display: inline-block;
+        width: 10px;
+        height: 3px;
+        background: var(--amber);
+        margin: 0 4px 2px 0;
+      }
+      .legend i.blue {
+        background: var(--blue);
+      }
+      .map {
+        width: 100%;
+        display: block;
+        background-color: #0c1118;
+        background-image:
+          linear-gradient(#ffffff06 1px, transparent 1px),
+          linear-gradient(90deg, #ffffff06 1px, transparent 1px),
+          radial-gradient(ellipse at 50% 46%, #1b2c39, #0b1017 72%);
+        background-size:
+          30px 30px,
+          30px 30px,
+          auto;
+        min-height: 375px;
+      }
+      .cluster {
+        font-size: 10px;
+        fill: #8faebb;
+        letter-spacing: 0.11em;
+      }
+      .link {
+        fill: none;
+        stroke: #4e8f92;
+        stroke-width: 2;
+        opacity: 0.85;
+      }
+      .link.direct {
+        stroke: var(--amber);
+        stroke-width: 3;
+      }
+      .link.future {
+        stroke: var(--blue);
+        stroke-dasharray: 6 6;
+      }
+      .link.decision {
+        stroke: var(--lime);
+        stroke-width: 2.5;
+      }
+      .node {
+        cursor: pointer;
+      }
+      .node circle {
+        stroke-width: 2;
+        transition: 0.2s ease;
+      }
+      .node:hover circle,
+      .node.selected circle {
+        stroke: #e9f2f1;
+        stroke-width: 3;
+        filter: drop-shadow(0 0 10px #49d2b870);
+      }
+      .node text {
+        fill: white;
+        font-size: 10px;
+        font-weight: 800;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+      .node .mini {
+        fill: #bfd5dc;
+        font-size: 8px;
+        font-weight: 500;
+      }
+      .nodeLabel {
+        fill: #c1d8de;
+        font-size: 9px;
+      }
+      .mapFoot {
+        padding: 8px 12px;
+        border-top: 1px solid var(--line);
+        font-size: 10px;
+        color: #9bb5c0;
+      }
+      .mapFoot b {
+        color: var(--teal);
+      }
+      .mapInspector {
+        margin: 0 13px 11px;
+        padding: 11px;
+        border-radius: 4px;
+        border: 1px solid #3b5360;
+        border-left: 3px solid var(--teal);
+        background: linear-gradient(100deg, #162630, #111a22);
+      }
+      .mapInspectorTop {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+      }
+      .mapInspectorTop b {
+        color: var(--teal);
+        font-size: 12px;
+      }
+      .mapInspectorTop span {
+        color: var(--amber);
+        font-size: 9px;
+        border: 1px solid #735c31;
+        padding: 3px 6px;
+        border-radius: 99px;
+      }
+      .mapInspectorGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+        margin-top: 9px;
+      }
+      .mapInspectorGrid div {
+        padding: 7px;
+        background: #0d141c;
+        border-radius: 3px;
+      }
+      .mapInspectorGrid small {
+        display: block;
+        color: #8eaab5;
+        font-size: 8px;
+        text-transform: uppercase;
+      }
+      .mapInspectorGrid b {
+        display: block;
+        margin-top: 2px;
+        color: #edf7f8;
+        font-size: 10px;
+      }
+      .outputs {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+      }
+      .metric {
+        background: #092439;
+        border: 1px solid #214c63;
+        border-radius: 7px;
+        padding: 8px;
+      }
+      .metric small {
+        color: #87a4b1;
+        font-size: 8px;
+        text-transform: uppercase;
+        display: block;
+      }
+      .metric b {
+        font-size: 13px;
+        display: block;
+        margin-top: 2px;
+      }
+      .metric b.warn {
+        color: var(--amber);
+      }
+      .metric b.risk {
+        color: var(--coral);
+      }
+      .metric b.ok {
+        color: var(--lime);
+      }
+      .plan {
+        display: grid;
+        grid-template-columns: 24px 1fr auto;
+        gap: 8px;
+        align-items: center;
+        border-bottom: 1px solid #1c4056;
+        padding: 8px 0;
+      }
+      .plan:last-child {
+        border: 0;
+      }
+      .number {
+        width: 21px;
+        height: 21px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #164f5e;
+        color: var(--teal);
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .plan b {
+        display: block;
+        font-size: 11px;
+      }
+      .plan small {
+        display: block;
+        color: #91abb6;
+        font-size: 9px;
+      }
+      .plan em {
+        font-style: normal;
+        font-size: 9px;
+        color: var(--amber);
+        border: 1px solid #6b572d;
+        border-radius: 99px;
+        padding: 3px 5px;
+      }
+      .inspector {
+        margin-top: 12px;
+        border-left: 3px solid var(--teal);
+        background: #0a293c;
+        padding: 10px;
+        font-size: 11px;
+        color: #c7dbe1;
+      }
+      .inspector b {
+        color: var(--teal);
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 5;
+        inset: 0;
+        background: #020b16e8;
+        padding: 18px;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal.show {
+        display: flex;
+      }
+      .qrSheet {
+        width: min(360px, 100%);
+        text-align: center;
+      }
+      .qrSheet p {
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .qrCanvas {
+        width: 220px;
+        height: 220px;
+        margin: 15px auto;
+        padding: 10px;
+        background: #fff;
+      }
+      .qrCanvas img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .qrUrl {
+        overflow-wrap: anywhere;
+        color: var(--teal);
+        font-size: 10px;
+      }
+      .sheet {
+        width: min(720px, 100%);
+        max-height: 90vh;
+        overflow: auto;
+        background: #0c2439;
+        border: 1px solid #41839a;
+        border-radius: 12px;
+        padding: 18px;
+      }
+      .close {
+        float: right;
+        border: 0;
+        background: none;
+        color: #aac6d1;
+        font-size: 22px;
+        cursor: pointer;
+      }
+      .sheet h2 {
+        margin: 0;
+        font-size: 19px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 10px;
+        border-top: 1px solid #245069;
+        padding: 10px 0;
+        font-size: 11px;
+      }
+      .row b {
+        color: var(--teal);
+      }
+      .row span {
+        color: #d7e8eb;
+      }
+      .visuals {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr 0.9fr;
+        gap: 12px;
+        margin: 0 0 12px;
+      }
+      .visualCard {
+        min-height: 190px;
+        overflow: hidden;
+        position: relative;
+      }
+      .visualCard:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 14px;
+        width: 42px;
+        height: 2px;
+        background: var(--teal);
+      }
+      .visualHead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .visualHead h2 {
+        font-size: 12px;
+      }
+      .tag {
+        font-size: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border: 1px solid #455664;
+        color: #a6c1ca;
+        border-radius: 3px;
+        padding: 3px 5px;
+        white-space: nowrap;
+      }
+      .impactNumber {
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+        margin: 13px 0 10px;
+      }
+      .impactNumber b {
+        font-size: 27px;
+        letter-spacing: -0.06em;
+        color: var(--amber);
+      }
+      .impactNumber small,
+      .miniNote {
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .costBars,
+      .scenarioStack {
+        display: grid;
+        gap: 7px;
+      }
+      .riskDonut {
+        display: grid;
+        grid-template-columns: 94px 1fr;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .donut {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: conic-gradient(
+          var(--coral) 0 61%,
+          var(--amber) 61% 87%,
+          var(--blue) 87% 100%
+        );
+        position: relative;
+      }
+      .donut:after {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border-radius: 50%;
+        background: #121922;
+        border: 1px solid #32414d;
+      }
+      .donut b {
+        z-index: 1;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.05;
+      }
+      .donut small {
+        z-index: 1;
+        margin-top: -24px;
+        font-size: 7px;
+        color: var(--muted);
+      }
+      .donutKey {
+        display: grid;
+        gap: 5px;
+        font-size: 8px;
+        color: #aebfc8;
+      }
+      .donutKey span:before {
+        content: "";
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 5px;
+        background: var(--coral);
+      }
+      .donutKey span:nth-child(2):before {
+        background: var(--amber);
+      }
+      .donutKey span:nth-child(3):before {
+        background: var(--blue);
+      }
+      .costRow {
+        display: grid;
+        grid-template-columns: 84px 1fr 58px;
+        gap: 7px;
+        align-items: center;
+        font-size: 9px;
+        color: #b7ced5;
+      }
+      .barTrack {
+        height: 10px;
+        background: #0b1016;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .bar {
+        height: 100%;
+        border-radius: 2px;
+        background: linear-gradient(90deg, #e09643, var(--amber));
+      }
+      .bar.coral {
+        background: linear-gradient(90deg, #ba5359, var(--coral));
+      }
+      .bar.blue {
+        background: linear-gradient(90deg, #457db5, var(--blue));
+      }
+      .costRow b {
+        font-size: 9px;
+        text-align: right;
+        color: #e5f0f2;
+      }
+      .miniNote {
+        margin: 10px 0 0;
+      }
+      .timeline {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 5px;
+        margin-top: 18px;
+      }
+      .timeline:before {
+        content: "";
+        position: absolute;
+        left: 7%;
+        right: 7%;
+        top: 12px;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--coral),
+          var(--amber),
+          var(--teal)
+        );
+      }
+      .milestone {
+        position: relative;
+        padding-top: 25px;
+        font-size: 8px;
+        color: #9db8c2;
+      }
+      .dot {
+        position: absolute;
+        top: 7px;
+        left: 0;
+        width: 12px;
+        height: 12px;
+        background: #0d2b40;
+        border: 3px solid var(--teal);
+        border-radius: 50%;
+        z-index: 1;
+      }
+      .milestone:first-child .dot {
+        border-color: var(--coral);
+      }
+      .milestone:nth-child(3) .dot {
+        border-color: var(--amber);
+      }
+      .milestone b {
+        display: block;
+        font-size: 9px;
+        color: #eff7f8;
+        margin-bottom: 2px;
+      }
+      .timeKpi {
+        display: flex;
+        gap: 13px;
+        margin-top: 18px;
+        padding: 9px;
+        background: #0f1922;
+        border: 1px solid #293946;
+        border-radius: 3px;
+      }
+      .timeKpi b {
+        font-size: 19px;
+        color: var(--coral);
+        letter-spacing: -0.05em;
+      }
+      .timeKpi span {
+        font-size: 9px;
+        color: #a9c1c9;
+      }
+      .clockFacts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .clockLedger {
+        display: grid;
+        gap: 5px;
+        margin-top: 8px;
+      }
+      .clockLedgerRow {
+        display: grid;
+        grid-template-columns: 42px 1fr auto;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 6px;
+        background: #0c131b;
+        border-left: 2px solid #536473;
+        font-size: 9px;
+      }
+      .clockLedgerRow span {
+        color: #8fa1af;
+        font-variant-numeric: tabular-nums;
+      }
+      .clockLedgerRow b {
+        font-size: 9px;
+        color: #e6eef2;
+      }
+      .clockLedgerRow em {
+        font-style: normal;
+        color: var(--amber);
+        font-size: 9px;
+      }
+      .clockFact {
+        padding: 6px;
+        border-radius: 3px;
+        background: #0d151d;
+        border: 1px solid #283844;
+      }
+      .clockFact small,
+      .outputLabel {
+        display: block;
+        color: #8eaab5;
+        font-size: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .clockFact b {
+        display: block;
+        margin-top: 2px;
+        color: #eef7f8;
+        font-size: 10px;
+      }
+      .mapLegend {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 7px 13px 0;
+        color: #9db7c2;
+        font-size: 9px;
+      }
+      .mapLegend span:before {
+        content: "";
+        display: inline-block;
+        width: 13px;
+        height: 3px;
+        border-radius: 2px;
+        margin: 0 4px 2px 0;
+        background: var(--amber);
+      }
+      .mapLegend .conditional:before {
+        background: var(--blue);
+      }
+      .mapLegend .decision:before {
+        background: var(--lime);
+      }
+      .mapStats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+        padding: 0 13px 11px;
+      }
+      .mapStat {
+        padding: 7px 8px;
+        background: #0e151d;
+        border: 1px solid #26333e;
+        border-radius: 3px;
+      }
+      .mapStat b {
+        display: block;
+        font-size: 13px;
+        color: var(--teal);
+      }
+      .mapStat small {
+        color: #91acb6;
+        font-size: 8px;
+      }
+      .decisionGrid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+        margin-top: 10px;
+      }
+      .decisionTile {
+        min-height: 62px;
+        padding: 8px;
+        background: linear-gradient(145deg, #151e28, #10171f);
+        border: 1px solid #303d49;
+        border-radius: 4px;
+        border-top: 2px solid #4c6170;
+      }
+      .decisionTile b {
+        display: block;
+        margin-top: 3px;
+        font-size: 12px;
+      }
+      .decisionTile small {
+        display: block;
+        margin-top: 3px;
+        font-size: 9px;
+        color: #9bb6c0;
+      }
+      .scenarioStack {
+        margin-top: 13px;
+        gap: 8px;
+      }
+      .scenario {
+        display: grid;
+        grid-template-columns: 56px 1fr 43px;
+        gap: 7px;
+        align-items: center;
+        font-size: 9px;
+      }
+      .scenario span {
+        color: #b8cdd4;
+      }
+      .scenario b {
+        text-align: right;
+        font-size: 10px;
+      }
+      .scenario .barTrack {
+        height: 16px;
+      }
+      .scenario .bar {
+        display: grid;
+        place-items: center;
+        color: #082033;
+        font-size: 8px;
+        font-weight: 900;
+      }
+      .scenario.normal .bar {
+        background: var(--teal);
+      }
+      .scenario.watch .bar {
+        background: var(--amber);
+      }
+      .scenario.adverse .bar {
+        background: var(--coral);
+      }
+      .scenarioFocus {
+        margin-top: 13px;
+        padding: 9px;
+        border-radius: 3px;
+        background: #182129;
+        border-left: 3px solid var(--coral);
+        font-size: 9px;
+        color: #c0d6dc;
+      }
+      .scenarioFocus b {
+        color: #fff;
+        font-size: 10px;
+      }
+      .fanChart {
+        position: relative;
+        height: 68px;
+        margin-top: 11px;
+        overflow: hidden;
+        border-bottom: 1px solid #44515e;
+        background: linear-gradient(180deg, #ffffff04, transparent);
+      }
+      .fanChart svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .fanAxis {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3px;
+        color: #8598a5;
+        font-size: 8px;
+      }
+      .waterfall {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        align-items: end;
+        gap: 5px;
+        height: 58px;
+        margin-top: 10px;
+        padding: 0 2px;
+        border-bottom: 1px solid #3d4b58;
+      }
+      .waterStep {
+        position: relative;
+        min-height: 18px;
+        background: #2d5260;
+        border-top: 2px solid var(--teal);
+      }
+      .waterStep:nth-child(2) {
+        background: #78613b;
+        border-color: var(--amber);
+      }
+      .waterStep:nth-child(3) {
+        background: #70454a;
+        border-color: var(--coral);
+      }
+      .waterStep:nth-child(4) {
+        background: #7e454b;
+        border-color: #ff9690;
+      }
+      .waterStep span {
+        position: absolute;
+        bottom: calc(100% + 3px);
+        left: 0;
+        color: #d7e4e8;
+        font-size: 8px;
+        white-space: nowrap;
+      }
+      .waterStep small {
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 0;
+        color: #8498a6;
+        font-size: 7px;
+        white-space: nowrap;
+      }
+      .scenarioLadder {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        margin-top: 8px;
+      }
+      .ladderStep {
+        padding: 6px;
+        min-height: 46px;
+        background: #0e151d;
+        border-left: 2px solid var(--teal);
+        font-size: 8px;
+        color: #a7b8c0;
+      }
+      .ladderStep:nth-child(2) {
+        border-color: var(--amber);
+      }
+      .ladderStep:nth-child(3) {
+        border-color: var(--coral);
+      }
+      .ladderStep b {
+        display: block;
+        color: #edf6f8;
+        font-size: 9px;
+        margin-bottom: 2px;
+      }
+      .analysisLines {
+        display: grid;
+        gap: 3px;
+        margin-top: 8px;
+        padding-top: 7px;
+        border-top: 1px solid #293743;
+        font-size: 8px;
+        color: #a9bbc4;
+      }
+      .analysisLines b {
+        color: var(--teal);
+        font-weight: 700;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body:before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          90deg,
+          transparent 0,
+          transparent calc(50% - 0.5px),
+          #ffffff03 calc(50% - 0.5px),
+          #ffffff03 calc(50% + 0.5px),
+          transparent calc(50% + 0.5px)
+        );
+        opacity: 0.8;
+      }
+      body::-webkit-scrollbar {
+        width: 10px;
+      }
+      body::-webkit-scrollbar-track {
+        background: #0a0e13;
+      }
+      body::-webkit-scrollbar-thumb {
+        background: #34434f;
+        border: 2px solid #0a0e13;
+        border-radius: 8px;
+      }
+      .shell {
+        position: relative;
+      }
+      .top {
+        position: relative;
+      }
+      .top:after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 150px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--teal), transparent);
+      }
+      .brand {
+        min-width: 0;
+      }
+      .logo {
+        box-shadow:
+          inset 0 1px #ffffff22,
+          0 8px 24px #0008;
+      }
+      .logo:after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border: 1px solid #49d2b866;
+        border-radius: 50%;
+      }
+      .top h1 {
+        font-weight: 780;
+      }
+      .top p {
+        letter-spacing: 0.015em;
+      }
+      .status {
+        box-shadow: inset 0 1px #ffffff13;
+      }
+      .status:before {
+        animation: pulse 2s ease-in-out infinite;
+      }
+      .ticker {
+        border-radius: 4px;
+        box-shadow: inset 0 1px #ffffff08;
+      }
+      .ticker:after {
+        content: "";
+        position: absolute;
+        right: 20px;
+        width: 48px;
+        height: 30px;
+        pointer-events: none;
+        background: linear-gradient(90deg, transparent, #0e141b);
+      }
+      .hero > .card:first-child {
+        position: relative;
+        overflow: hidden;
+      }
+      .hero > .card:first-child:after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        right: -65px;
+        top: -120px;
+        border: 1px solid #49d2b82e;
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 25px #49d2b809,
+          0 0 0 50px #49d2b805;
+        pointer-events: none;
+      }
+      .card {
+        transition:
+          transform 0.22s ease,
+          border-color 0.22s ease,
+          box-shadow 0.22s ease;
+      }
+      .card:hover {
+        border-color: #465966;
+        box-shadow: 0 22px 46px #00000036;
+        transform: translateY(-2px);
+      }
+      .hero .card:hover,
+      .mapCard:hover {
+        transform: none;
+      }
+      .case {
+        position: relative;
+        border-left: 3px solid var(--teal);
+      }
+      .case b {
+        letter-spacing: 0.01em;
+      }
+      .controls .control {
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.2s ease,
+          transform 0.2s ease;
+      }
+      .controls .control:after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: 2px;
+        background: currentColor;
+        opacity: 0.7;
+      }
+      .controls .control:hover {
+        transform: translateY(-2px);
+        border-color: #607483;
+      }
+      .chip {
+        min-height: 31px;
+        transition: all 0.18s ease;
+      }
+      .chip:hover {
+        border-color: #718794;
+        color: #fff;
+        transform: translateY(-1px);
+      }
+      .chip:focus-visible,
+      .shareBtn:focus-visible {
+        outline: 2px solid var(--teal);
+        outline-offset: 2px;
+      }
+      .chip.active {
+        box-shadow: 0 5px 16px #1a897422;
+      }
+      .visualHead {
+        padding-bottom: 7px;
+        border-bottom: 1px solid #ffffff0d;
+      }
+      .visualCard {
+        isolation: isolate;
+      }
+      .visualCard:after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 90px;
+        height: 90px;
+        background: radial-gradient(
+          circle at 100% 100%,
+          #49d2b810,
+          transparent 70%
+        );
+        z-index: -1;
+      }
+      .impactNumber b {
+        text-shadow: 0 4px 16px #f7b95525;
+      }
+      .donut {
+        box-shadow:
+          0 0 0 5px #ffffff06,
+          0 8px 18px #0006;
+      }
+      .waterfall {
+        position: relative;
+      }
+      .waterfall:before {
+        content: "ADVERSE COST BUILD-UP";
+        position: absolute;
+        top: -14px;
+        left: 0;
+        color: #7e919f;
+        font-size: 7px;
+        letter-spacing: 0.08em;
+      }
+      .timeline {
+        padding-top: 2px;
+      }
+      .milestone {
+        transition: transform 0.2s ease;
+      }
+      .milestone:hover {
+        transform: translateY(-3px);
+      }
+      .dot {
+        box-shadow: 0 0 0 4px #49d2b810;
+      }
+      .scenario {
+        transition: transform 0.2s ease;
+      }
+      .scenario:hover {
+        transform: translateX(3px);
+      }
+      .fanChart {
+        border-top: 1px solid #ffffff09;
+      }
+      .scenarioLadder .ladderStep {
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
+      }
+      .ladderStep:hover {
+        background: #17222b;
+        transform: translateY(-2px);
+      }
+      .mapCard {
+        box-shadow: 0 24px 54px #0000003d;
+      }
+      .mapHead {
+        padding-top: 16px;
+      }
+      .mapHead h2:before {
+        content: "◈";
+        color: var(--teal);
+        margin-right: 7px;
+      }
+      .mapLegend {
+        border-top: 1px solid #ffffff0b;
+        margin-top: 10px;
+        padding-top: 9px;
+      }
+      .map {
+        cursor: crosshair;
+      }
+      .node circle {
+        transform-origin: center;
+      }
+      .node:hover {
+        opacity: 1;
+      }
+      .node:hover circle {
+        transform: scale(1.05);
+      }
+      .node.selected circle {
+        animation: nodePulse 2s ease-in-out infinite;
+      }
+      .mapInspector {
+        box-shadow:
+          inset 0 1px #ffffff0a,
+          0 10px 24px #00000021;
+      }
+      .mapInspectorGrid div {
+        transition: background 0.2s ease;
+      }
+      .mapInspectorGrid div:hover {
+        background: #16232d;
+      }
+      .metric {
+        transition: all 0.2s ease;
+      }
+      .metric:hover {
+        transform: translateY(-2px);
+        border-color: #516879;
+        background: #12202b;
+      }
+      .decisionTile {
+        transition: all 0.2s ease;
+      }
+      .decisionTile:hover {
+        border-top-color: var(--teal);
+        border-color: #49606e;
+        transform: translateY(-2px);
+      }
+      .plan {
+        transition:
+          background 0.2s ease,
+          padding 0.2s ease;
+        border-radius: 4px;
+      }
+      .plan:hover {
+        background: #ffffff06;
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+      .number {
+        box-shadow: 0 0 0 3px #49d2b810;
+      }
+      .shareBtn {
+        box-shadow: inset 0 1px #ffffff17;
+      }
+      .shareBtn:before {
+        content: "↗";
+        font-size: 12px;
+        margin-right: 5px;
+        color: var(--teal);
+      }
+      .modal .sheet {
+        box-shadow: 0 30px 90px #000c;
+      }
+      .close:hover {
+        color: #fff;
+      }
+      @keyframes pulse {
+        50% {
+          opacity: 0.4;
+          box-shadow: 0 0 12px var(--teal);
+        }
+      }
+      @keyframes nodePulse {
+        50% {
+          filter: drop-shadow(0 0 16px #49d2b8a0);
+        }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .hero,
+        .visuals,
+        .mapCard,
+        .outputs {
+          animation: rise 0.45s ease both;
+        }
+        .visuals {
+          animation-delay: 0.08s;
+        }
+        .mapCard {
+          animation-delay: 0.14s;
+        }
+        .outputs {
+          animation-delay: 0.2s;
+        }
+        @keyframes rise {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      }
+      @media (max-width: 850px) {
+        .shell {
+          padding: 12px;
+        }
+        .hero,
+        .outputs {
+          grid-template-columns: 1fr;
+        }
+        .map {
+          min-height: 340px;
+        }
+        .row {
+          grid-template-columns: 1fr;
+        }
+        .visuals {
+          grid-template-columns: 1fr 1fr;
+        }
+        .visuals .visualCard:first-child {
+          grid-column: span 2;
+        }
+      }
+      @media (max-width: 520px) {
+        .top {
+          align-items: flex-start;
+        }
+        .headerActions {
+          gap: 5px;
+          flex-direction: column-reverse;
+          align-items: flex-end;
+        }
+        .shareBtn {
+          min-height: 32px;
+          padding: 8px 9px;
+        }
+        .status {
+          font-size: 8px;
+        }
+        .top h1 {
+          font-size: 18px;
+          line-height: 1.08;
+        }
+        .top p {
+          max-width: 220px;
+        }
+        .ticker {
+          margin-top: 10px;
+        }
+        .card {
+          padding: 12px;
+        }
+        .hero > .card:first-child:after {
+          width: 130px;
+          height: 130px;
+          right: -55px;
+          top: -95px;
+        }
+        .controls {
+          grid-template-columns: 1fr 1fr;
+        }
+        .metrics {
+          grid-template-columns: 1fr 1fr;
+        }
+        .map {
+          min-height: 315px;
+        }
+        .cluster {
+          font-size: 8px;
+        }
+        .node text {
+          font-size: 8px;
+        }
+        .node .mini {
+          font-size: 6px;
+        }
+        .nodeLabel {
+          font-size: 7px;
+        }
+        .visuals {
+          grid-template-columns: 1fr;
+        }
+        .visuals .visualCard:first-child {
+          grid-column: auto;
+        }
+        .costRow {
+          grid-template-columns: 76px 1fr 52px;
+        }
+        .timeline {
+          gap: 2px;
+        }
+        .milestone {
+          font-size: 7px;
+        }
+        .milestone b {
+          font-size: 8px;
+        }
+        .clockFacts,
+        .mapStats,
+        .mapInspectorGrid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .decisionGrid {
+          grid-template-columns: 1fr;
+        }
+        .waterStep span {
+          font-size: 7px;
+        }
+        .waterStep small {
+          font-size: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="top">
+        <div class="brand">
+          <div class="logo">RS</div>
+          <div>
+            <div class="eyebrow">Realsock XAI</div>
+            <h1>Supply Chain-to-Housing Planning Simulator</h1>
+            <p>For Australian residential developers and builders.</p>
+          </div>
+        </div>
+        <div class="headerActions">
+          <button class="shareBtn" id="shareBtn" type="button">
+            Share / QR</button
+          ><span class="status">MARKET MONITORING · DEMO</span>
+        </div>
+      </header>
+      <div class="ticker" aria-label="Illustrative scenario ticker">
+        <span>HORMUZ 6W</span><b>HIGH</b><span>FREIGHT</span><b>+18–45%</b
+        ><span>CARGO COVER</span><b>+0.6–1.4pp</b><span>BUILD COST</span
+        ><b>+1.8–4.6%</b><span>PROGRAMME</span><b>+2–8W</b>
+      </div>
+      <section class="hero">
+        <article class="card">
+          <h2>Hormuz disruption - apartment project A</h2>
+          <p class="sub">
+            Example: imported fittings on a critical delivery path. Realsock
+            turns an external event into a project plan.
+          </p>
+          <div class="case">
+            <b>What the project team sees today</b>
+            <p>
+              Shipping disruption may change freight, insurance and arrival
+              dates. The direct question is not “what will house prices do?” but
+              “which project commitment needs changing this week?”
+            </p>
+          </div>
+          <div class="viewbar">
+            <button class="chip active" data-case="hormuz">
+              Hormuz / 6 weeks</button
+            ><button class="chip" data-case="trade">Trade diversion</button
+            ><button class="chip" data-case="rates">RBA +25bp</button
+            ><button class="chip" id="cardBtn">Open plan card</button>
+          </div>
+        </article>
+        <article class="card">
+          <h2>Planning snapshot</h2>
+          <p class="sub">
+            Illustrative adverse case. Values are scenario ranges, not confirmed
+            forecasts.
+          </p>
+          <div class="controls">
+            <div class="control">
+              <small>Build cost</small><b class="amber" id="cost">+1.8–4.6%</b>
+            </div>
+            <div class="control">
+              <small>Delivery buffer</small
+              ><b class="coral" id="delay">2–8 weeks</b>
+            </div>
+            <div class="control">
+              <small>Plan readiness</small
+              ><b class="lime" id="readiness">62%</b>
+            </div>
+          </div>
+          <div class="inspector" id="inspector">
+            <b>Selected path:</b> Hormuz event → freight & insurance → imported
+            fittings → apartment handover → procurement action.
+          </div>
+        </article>
+      </section>
+      <section
+        class="visuals"
+        aria-label="Illustrative project impact dashboard"
+      >
+        <article class="card visualCard">
+          <div class="visualHead">
+            <h2>Budget at risk</h2>
+            <span class="tag">A$80m project</span>
+          </div>
+          <div class="impactNumber">
+            <b id="dollarImpact">A$1.44m–3.68m</b>
+            <small id="impactCaption">adverse range</small>
+          </div>
+          <div class="costBars">
+            <div class="costRow">
+              <span>Freight</span>
+              <div class="barTrack">
+                <div class="bar" id="freightBar" style="width: 26%"></div>
+              </div>
+              <b id="freightValue">A$0.38–0.95m</b>
+            </div>
+            <div class="costRow">
+              <span>Insurance</span>
+              <div class="barTrack">
+                <div
+                  class="bar blue"
+                  id="insuranceBar"
+                  style="width: 13%"
+                ></div>
+              </div>
+              <b id="insuranceValue">A$0.18–0.45m</b>
+            </div>
+            <div class="costRow">
+              <span>Materials / delay</span>
+              <div class="barTrack">
+                <div
+                  class="bar coral"
+                  id="materialsBar"
+                  style="width: 61%"
+                ></div>
+              </div>
+              <b id="materialsValue">A$0.88–2.28m</b>
+            </div>
+          </div>
+          <p class="miniNote">
+            Range = 1.8–4.6% of an illustrative A$80m build budget.
+          </p>
+          <div class="riskDonut">
+            <div class="donut"><b>61%</b><small>largest driver</small></div>
+            <div class="donutKey">
+              <span>Materials / delay — 61%</span><span>Freight — 26%</span
+              ><span>Cargo cover — 13%</span
+              ><span>Priority: substitute fittings first</span>
+            </div>
+          </div>
+          <div
+            class="waterfall"
+            aria-label="Illustrative adverse cost build-up"
+          >
+            <div class="waterStep" style="height: 22%">
+              <span>A$80.00m</span><small>base</small>
+            </div>
+            <div class="waterStep" style="height: 36%">
+              <span>+A$0.95m</span><small>freight</small>
+            </div>
+            <div class="waterStep" style="height: 48%">
+              <span>+A$0.45m</span><small>cover</small>
+            </div>
+            <div class="waterStep" style="height: 100%">
+              <span>A$83.68m</span><small>adverse</small>
+            </div>
+          </div>
+          <div class="analysisLines">
+            <span
+              ><b>Cost trigger:</b> freight plus cover reaches A$1.40m before
+              material substitution is assessed.</span
+            ><span
+              ><b>Control:</b> substitute fittings is the highest-value action
+              because it addresses 61% of the adverse range.</span
+            >
+          </div>
+        </article>
+        <article class="card visualCard">
+          <div class="visualHead">
+            <h2>Hormuz critical-path clock</h2>
+            <span class="tag" id="timeTag">2–8 weeks</span>
+          </div>
+          <div class="timeline">
+            <div class="milestone">
+              <i class="dot"></i><b>Day 0</b>Carrier alert
+            </div>
+            <div class="milestone">
+              <i class="dot"></i><b>Day 2</b>Route & cover
+            </div>
+            <div class="milestone">
+              <i class="dot"></i><b>Day 5</b>ETA variance
+            </div>
+            <div class="milestone">
+              <i class="dot"></i><b>Day 7</b>Quote lock
+            </div>
+            <div class="milestone">
+              <i class="dot"></i><b>Day 10</b>PM decision
+            </div>
+            <div class="milestone">
+              <i class="dot"></i><b>Week 6</b>Reforecast
+            </div>
+          </div>
+          <div class="timeKpi">
+            <b id="timeKpi">48h</b
+            ><span
+              >carrier route, war-risk cover and supplier stock must be
+              confirmed before the A$8.6m fittings package is released.</span
+            >
+          </div>
+          <div class="clockFacts">
+            <div class="clockFact">
+              <small>At-risk package</small><b>A$8.6m fittings</b>
+            </div>
+            <div class="clockFact">
+              <small>Transit delta</small><b id="bufferFact">+7–14 sea days</b>
+            </div>
+            <div class="clockFact">
+              <small>Decision owner</small><b>Procurement + PM</b>
+            </div>
+          </div>
+          <div class="clockLedger">
+            <div class="clockLedgerRow">
+              <span>D+2</span><b>Carrier confirms alternate routing</b
+              ><em>ETA +7–14d</em>
+            </div>
+            <div class="clockLedgerRow">
+              <span>D+5</span><b>Supplier confirms stock / substitute</b
+              ><em>A$8.6m exposed</em>
+            </div>
+            <div class="clockLedgerRow">
+              <span>D+7</span><b>Two landed-cost quotes received</b
+              ><em>+A$0.55–1.40m</em>
+            </div>
+            <div class="clockLedgerRow">
+              <span>D+10</span><b>Approve substitute or programme buffer</b
+              ><em>avoid +2–8w</em>
+            </div>
+          </div>
+        </article>
+        <article class="card visualCard">
+          <div class="visualHead">
+            <h2>Scenario range</h2>
+            <span class="tag">tap a case above</span>
+          </div>
+          <div class="scenarioStack">
+            <div class="scenario normal">
+              <span>Normal</span>
+              <div class="barTrack">
+                <div class="bar" style="width: 22%">0–0.8%</div>
+              </div>
+              <b>91%</b>
+            </div>
+            <div class="scenario watch">
+              <span>Watch</span>
+              <div class="barTrack">
+                <div class="bar" style="width: 52%">0.9–1.7%</div>
+              </div>
+              <b>78%</b>
+            </div>
+            <div class="scenario adverse">
+              <span>Adverse</span>
+              <div class="barTrack">
+                <div class="bar" id="adverseBar" style="width: 100%">
+                  1.8–4.6%
+                </div>
+              </div>
+              <b id="adverseReady">62%</b>
+            </div>
+          </div>
+          <div class="scenarioFocus">
+            <b id="focusTitle">Focus: adverse case</b><br /><span id="focusCopy"
+              >Protect handover and re-price imported fittings now.</span
+            >
+          </div>
+          <div
+            class="fanChart"
+            aria-label="Illustrative six-week build-cost scenario range"
+          >
+            <svg viewBox="0 0 300 68" preserveAspectRatio="none">
+              <path
+                d="M0 51 C55 49 84 44 120 35 S208 10 300 7 L300 30 C220 31 165 42 120 49 S54 59 0 62Z"
+                fill="#f3727230"
+              />
+              <path
+                d="M0 55 C58 53 87 48 123 41 S214 21 300 18 L300 30 C220 31 165 42 123 49 S58 59 0 62Z"
+                fill="#f7b95545"
+              />
+              <path
+                d="M0 59 C65 57 93 53 126 47 S215 34 300 31"
+                fill="none"
+                stroke="#49d2b8"
+                stroke-width="2"
+              />
+              <line
+                x1="0"
+                y1="62"
+                x2="300"
+                y2="62"
+                stroke="#637380"
+                stroke-width="1"
+              />
+              <text x="4" y="13" fill="#f37272" font-size="8">
+                adverse ceiling +4.6%
+              </text>
+              <text x="217" y="51" fill="#49d2b8" font-size="8">
+                central path
+              </text>
+            </svg>
+          </div>
+          <div class="fanAxis">
+            <span>Day 0</span><span>Week 2</span><span>Week 4</span
+            ><span>Week 6</span>
+          </div>
+          <div class="scenarioLadder">
+            <div class="ladderStep">
+              <b>Week 2</b>Route verified<br />Watch case
+            </div>
+            <div class="ladderStep">
+              <b>Week 4</b>ETA slips &gt;7d<br />Quote lock
+            </div>
+            <div class="ladderStep">
+              <b>Week 6</b>ETA slips &gt;14d<br />Adverse plan
+            </div>
+          </div>
+          <div class="analysisLines">
+            <span
+              ><b>Base case:</b> retain original programme if ETA slip stays
+              below 7 days and substitute is approved.</span
+            ><span
+              ><b>Escalate:</b> activate contingency and lender margin test once
+              the slip exceeds 14 days.</span
+            >
+          </div>
+        </article>
+      </section>
+      <article class="card mapCard">
+        <div class="mapHead">
+          <div>
+            <h2>2D Context Map - Hormuz to project and housing outcomes</h2>
+            <p class="sub">
+              Tap any node: every link shows a testable assumption, direct
+              project impact or conditional market outcome.
+            </p>
+          </div>
+          <span class="legend"
+            ><i></i>direct / testable &nbsp;
+            <i class="blue"></i>longer-horizon</span
+          >
+        </div>
+        <div class="mapLegend">
+          <span>direct evidence / project check</span
+          ><span class="conditional">conditional market pathway</span
+          ><span class="decision">decision required</span>
+        </div>
+        <svg
+          class="map"
+          viewBox="0 0 1100 550"
+          aria-label="2D Realsock supply chain to housing planning map"
+        >
+          <text class="cluster" x="65" y="55">GLOBAL EVENT</text>
+          <text class="cluster" x="275" y="55">LOGISTICS & INPUTS</text>
+          <text class="cluster" x="535" y="55">PROJECT DELIVERY</text>
+          <text class="cluster" x="815" y="55">FINANCE & HOUSING</text>
+          <path class="link direct" d="M175 210 C235 210 255 150 335 145" />
+          <path class="link direct" d="M175 210 C245 210 260 225 335 225" />
+          <path class="link" d="M175 210 C245 220 270 300 335 310" />
+          <path class="link direct" d="M175 210 C245 230 270 390 335 410" />
+          <path class="link direct" d="M415 225 C480 225 505 190 595 185" />
+          <path class="link" d="M415 145 C492 155 525 185 595 185" />
+          <path class="link" d="M415 310 C490 300 530 260 595 245" />
+          <path class="link direct" d="M415 410 C490 410 530 345 595 320" />
+          <path class="link direct" d="M675 185 C740 160 790 145 875 145" />
+          <path class="link decision" d="M675 185 C740 210 795 245 875 255" />
+          <path class="link future" d="M675 245 C750 300 805 365 887 385" />
+          <path class="link future" d="M675 245 C748 245 800 240 875 235" />
+          <path class="link decision" d="M675 320 C750 320 805 325 890 315" />
+          <path class="link future" d="M675 320 C745 390 805 430 890 465" />
+          <path class="link future" d="M955 390 C982 410 990 445 955 465" />
+          <text class="nodeLabel" x="215" y="194">+7–14 sea days</text>
+          <text class="nodeLabel" x="455" y="208">+18–45% freight</text>
+          <text class="nodeLabel" x="740" y="171">+2–8 weeks</text>
+          <text class="nodeLabel" x="200" y="368">+0.6–1.4pp cover</text>
+          <text class="nodeLabel" x="720" y="311">−1.2–3.1pp margin</text>
+          <text class="nodeLabel" x="745" y="390">+1–3 months supply</text>
+          <text class="nodeLabel" x="780" y="458">settlement +2–8 weeks</text>
+          <text class="nodeLabel" x="220" y="285">+0.2–0.7% build cost</text>
+          <text class="nodeLabel" x="445" y="145">ETA +7–14 days</text>
+          <text class="nodeLabel" x="452" y="365">quote + substitute</text>
+          <text class="nodeLabel" x="735" y="238">owner + due date</text>
+          <g
+            class="node selected"
+            data-node="event"
+            transform="translate(130 210)"
+          >
+            <circle r="44" fill="#0e6974" stroke="#39d6c4" />
+            <text y="-7">HORMUZ</text>
+            <text y="7">EVENT</text>
+            <text class="mini" y="24">0.82 confidence</text>
+          </g>
+          <g class="node" data-node="route" transform="translate(375 145)">
+            <circle r="35" fill="#725130" stroke="#ffc35d" />
+            <text y="-5">SHIPPING</text>
+            <text y="8">ROUTE</text>
+            <text class="mini" y="22">rerouting</text>
+          </g>
+          <g class="node" data-node="freight" transform="translate(375 225)">
+            <circle r="37" fill="#3d6571" stroke="#9bcacc" />
+            <text y="-5">FREIGHT &</text>
+            <text y="8">INSURANCE</text>
+            <text class="mini" y="23">landed cost</text>
+          </g>
+          <g class="node" data-node="energy" transform="translate(375 310)">
+            <circle r="32" fill="#2e5784" stroke="#7eb6ff" />
+            <text y="-4">ENERGY</text>
+            <text y="9">INPUTS</text>
+          </g>
+          <g class="node" data-node="insurance" transform="translate(375 410)">
+            <circle r="32" fill="#5b4a6e" stroke="#b88bf1" />
+            <text y="-4">CARGO</text>
+            <text y="9">COVER</text>
+            <text class="mini" y="22">premium</text>
+          </g>
+          <g class="node" data-node="materials" transform="translate(635 185)">
+            <circle r="42" fill="#455f6e" stroke="#c3d9dc" />
+            <text y="-7">IMPORTED</text>
+            <text y="6">FITTINGS</text>
+            <text class="mini" y="23">critical path</text>
+          </g>
+          <g class="node" data-node="cashflow" transform="translate(635 245)">
+            <circle r="33" fill="#405683" stroke="#7eb6ff" />
+            <text y="-4">CASH</text>
+            <text y="9">FLOW</text>
+          </g>
+          <g class="node" data-node="programme" transform="translate(635 320)">
+            <circle r="37" fill="#6f4d3b" stroke="#ffc35d" />
+            <text y="-5">PROGRAMME</text>
+            <text y="8">BUFFER</text>
+            <text class="mini" y="23">handover</text>
+          </g>
+          <g class="node" data-node="cost" transform="translate(920 145)">
+            <circle r="35" fill="#884e54" stroke="#fb776d" />
+            <text y="-4">COST &</text>
+            <text y="9">DELAY</text>
+          </g>
+          <g class="node" data-node="actions" transform="translate(920 255)">
+            <circle r="38" fill="#205866" stroke="#c6ec66" />
+            <text y="-4">WORK</text>
+            <text y="9">PLAN</text>
+            <text class="mini" y="24">owners + dates</text>
+          </g>
+          <g class="node" data-node="finance" transform="translate(920 315)">
+            <circle r="29" fill="#355e72" stroke="#39d6c4" />
+            <text y="-4">DEBT &</text>
+            <text y="9">MARGIN</text>
+          </g>
+          <g class="node" data-node="supply" transform="translate(920 390)">
+            <circle r="33" fill="#514579" stroke="#b88bf1" />
+            <text y="-4">SUPPLY /</text>
+            <text y="9">RENT</text>
+          </g>
+          <g class="node" data-node="buyers" transform="translate(920 465)">
+            <circle r="32" fill="#754f5c" stroke="#fb776d" />
+            <text y="-4">BUYER</text>
+            <text y="9">TIMING</text>
+          </g>
+        </svg>
+        <div class="mapStats">
+          <div class="mapStat"><b>13</b><small>visible nodes</small></div>
+          <div class="mapStat"><b>15</b><small>causal pathways</small></div>
+          <div class="mapStat"><b>5</b><small>decision checks</small></div>
+          <div class="mapStat"><b>0.82</b><small>event confidence</small></div>
+        </div>
+        <div class="mapInspector" id="mapInspector">
+          <div class="mapInspectorTop">
+            <b id="mapTitle">Hormuz maritime disruption</b
+            ><span id="mapType">EVENT / 0.82 confidence</span>
+          </div>
+          <div class="mapInspectorGrid">
+            <div>
+              <small>Scenario input</small
+              ><b id="mapInput">6-week disruption</b>
+            </div>
+            <div>
+              <small>Measured change</small><b id="mapChange">+7–14 sea days</b>
+            </div>
+            <div>
+              <small>Project exposure</small
+              ><b id="mapExposure">Imported fittings</b>
+            </div>
+            <div>
+              <small>Decision by</small><b id="mapDecision">48 hours</b>
+            </div>
+          </div>
+        </div>
+        <div class="mapFoot">
+          <b>How to use:</b> follow amber links for immediate project decisions;
+          blue links are longer-horizon housing scenarios with wider
+          uncertainty.
+        </div>
+      </article>
+      <section class="outputs">
+        <article class="card">
+          <h2>Developer planning outputs — Hormuz / 6-week case</h2>
+          <p class="sub">
+            Decision pack for an illustrative A$80m apartment build with
+            imported fittings on the handover path.
+          </p>
+          <div class="metrics">
+            <div class="metric">
+              <small>Procurement</small><b class="warn">2 quotes / 48h</b>
+            </div>
+            <div class="metric">
+              <small>Route verification</small
+              ><b class="risk">0.82 confidence</b>
+            </div>
+            <div class="metric">
+              <small>Programme buffer</small><b class="risk">2–8 weeks</b>
+            </div>
+            <div class="metric">
+              <small>Contingency test</small><b class="warn">A$1.44–3.68m</b>
+            </div>
+            <div class="metric">
+              <small>Cash-flow review</small><b class="ok">Drawdown + margin</b>
+            </div>
+            <div class="metric">
+              <small>Contract exposure</small><b class="ok">Variation + EOT</b>
+            </div>
+          </div>
+          <div class="decisionGrid">
+            <div class="decisionTile">
+              <span class="outputLabel">Supplier & inventory</span
+              ><b>Check 3 packages</b
+              ><small
+                >Fittings, façade components and MEP equipment; confirm origin,
+                stock-on-hand and substitute.</small
+              >
+            </div>
+            <div class="decisionTile">
+              <span class="outputLabel">Landed cost</span
+              ><b>Re-price A$1.44–3.68m</b
+              ><small
+                >Separate freight, cargo cover, replacement and delay cost
+                before approving a variation.</small
+              >
+            </div>
+            <div class="decisionTile">
+              <span class="outputLabel">Programme</span
+              ><b>Protect handover gate</b
+              ><small
+                >Run 2, 6 and 8-week buffers; resequence unaffected trades
+                before shifting completion.</small
+              >
+            </div>
+            <div class="decisionTile">
+              <span class="outputLabel">Finance & buyer risk</span
+              ><b>Stress margin and settlement</b
+              ><small
+                >Test facility drawdown, contingency, presale expiry and buyer
+                finance timing.</small
+              >
+            </div>
+          </div>
+          <div class="inspector">
+            <b>Useful output:</b> a weekly plan that connects decisions to
+            evidence. It can be shared with procurement, construction, finance,
+            sales and lender stakeholders without asking them to trust a
+            black-box score.
+          </div>
+        </article>
+        <article class="card">
+          <h2>Recommended work plan</h2>
+          <p class="sub">
+            Hormuz 6-week case. Each item becomes a traceable decision record.
+          </p>
+          <div class="plan">
+            <i class="number">1</i>
+            <div>
+              <b>Confirm supplier route and inventory</b
+              ><small
+                >Identify fittings, steel or equipment relying on the affected
+                corridor.</small
+              >
+            </div>
+            <em>Now</em>
+          </div>
+          <div class="plan">
+            <i class="number">2</i>
+            <div>
+              <b>Get two alternate landed-cost quotes</b
+              ><small
+                >Compare freight, insurance, lead time and substitution
+                options.</small
+              >
+            </div>
+            <em>48h</em>
+          </div>
+          <div class="plan">
+            <i class="number">3</i>
+            <div>
+              <b>Protect programme and handover milestone</b
+              ><small
+                >Test 2, 6 and 12-week delay buffers; sequence non-affected
+                work.</small
+              >
+            </div>
+            <em>This week</em>
+          </div>
+          <div class="plan">
+            <i class="number">4</i>
+            <div>
+              <b>Stress-test contingency and cash flow</b
+              ><small
+                >Check cost range against facility drawdown, presales and margin
+                buffer.</small
+              >
+            </div>
+            <em>Finance</em>
+          </div>
+          <div class="plan">
+            <i class="number">5</i>
+            <div>
+              <b>Prepare stakeholder communication</b
+              ><small
+                >Issue one evidence-linked update to subcontractors, lenders and
+                buyers.</small
+              >
+            </div>
+            <em>Review</em>
+          </div>
+        </article>
+      </section>
+    </main>
+    <div class="modal" id="modal">
+      <div class="sheet">
+        <button class="close" id="close">×</button>
+        <h2>Realsock Developer Planning Card</h2>
+        <p>
+          Hormuz walk-through: a mobile-friendly plan linked to visible evidence
+          and assumptions.
+        </p>
+        <div class="row">
+          <b>Event and confidence</b
+          ><span
+            >Hormuz shipping disruption, confidence 0.82 from corroborating
+            reports. The system never treats the news as direct proof of a
+            housing price change.</span
+          >
+        </div>
+        <div class="row">
+          <b>Project exposure</b
+          ><span
+            >Apartment Project A: imported fittings are on the critical handover
+            path. Supplier-route evidence remains a required verification
+            step.</span
+          >
+        </div>
+        <div class="row">
+          <b>Cost and programme</b
+          ><span
+            >Illustrative 6-week adverse case: +1.8–4.6% build-cost range and
+            2–8 week delivery buffer.</span
+          >
+        </div>
+        <div class="row">
+          <b>Procurement plan</b
+          ><span
+            >Obtain two alternate landed-cost quotes; compare route, insurance,
+            lead time, substitution and contract variation implications.</span
+          >
+        </div>
+        <div class="row">
+          <b>Finance plan</b
+          ><span
+            >Stress-test contingency and cash flow against the adverse range;
+            review facility drawdown, presales and margin buffer.</span
+          >
+        </div>
+        <div class="row">
+          <b>Stakeholder plan</b
+          ><span
+            >Share an evidence-linked update with subcontractors, lender and
+            customer-facing teams. Re-run when supplier route information
+            changes.</span
+          >
+        </div>
+        <button class="chip active" id="close2">Return to map</button>
+      </div>
+    </div>
+    <div
+      class="modal"
+      id="qrModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="qrTitle"
+    >
+      <div class="sheet qrSheet">
+        <button class="close" id="qrClose" aria-label="Close">×</button>
+        <h2 id="qrTitle">Open Realsock on mobile</h2>
+        <p id="qrMessage">Scan the code to open this public demo.</p>
+        <div class="qrCanvas">
+          <img id="qrImage" alt="QR code for Realsock demo" />
+        </div>
+        <p class="qrUrl" id="qrUrl"></p>
+      </div>
+    </div>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const info = {
+        event: {
+          title: "Hormuz maritime disruption",
+          type: "EVENT / 0.82 confidence",
+          input: "6-week disruption",
+          change: "+7–14 sea days",
+          exposure: "3 imported packages",
+          decision: "Validate sources today",
+          detail:
+            "Scenario trigger: corroborated maritime reports are translated into a 6-week route-disruption case; not proof of a housing-price change.",
+        },
+        route: {
+          title: "Shipping route reroute",
+          type: "DIRECT / route assumption",
+          input: "Red Sea + Hormuz avoidance",
+          change: "+7–14 sea days",
+          exposure: "2 Asia–Australia sailings",
+          decision: "Confirm carrier in 48h",
+          detail:
+            "Check the actual booked carrier, transhipment port and revised ETA; a route change activates the freight and delivery scenarios.",
+        },
+        freight: {
+          title: "Freight and surcharge",
+          type: "DIRECT / landed-cost input",
+          input: "Base freight A$0.84m",
+          change: "+18–45% = A$0.15–0.38m",
+          exposure: "Fittings + façade packages",
+          decision: "Obtain 2 quotes in 48h",
+          detail:
+            "The system separates carrier surcharge from material cost. Replace this illustrative range with supplier quote evidence before contract action.",
+        },
+        energy: {
+          title: "Energy input channel",
+          type: "SECONDARY / conditional",
+          input: "Energy-sensitive trades",
+          change: "+0.2–0.7% build cost",
+          exposure: "Concrete, transport, plant",
+          decision: "Review weekly",
+          detail:
+            "Secondary pass-through range; kept separate from freight so the project team does not double-count cost exposure.",
+        },
+        insurance: {
+          title: "Cargo cover premium",
+          type: "DIRECT / policy check",
+          input: "Cargo cover A$0.30m",
+          change: "+0.6–1.4pp = A$0.02–0.04m",
+          exposure: "Open shipments + renewals",
+          decision: "Confirm insurer in 48h",
+          detail:
+            "Check war-risk surcharge, exclusions and renewal date. This is a specific landed-cost item, not a generic risk label.",
+        },
+        materials: {
+          title: "Imported fittings package",
+          type: "PROJECT / critical delivery",
+          input: "Package value A$8.6m",
+          change: "+2–8 weeks arrival risk",
+          exposure: "Lobby, kitchen, bathroom fit-out",
+          decision: "Lock substitute by Week 1",
+          detail:
+            "Project-specific exposure: stock-on-hand, substitute specification and variation approval determine whether the scenario becomes an actual delay.",
+        },
+        cashflow: {
+          title: "Cash-flow and drawdown",
+          type: "FINANCE / scenario test",
+          input: "A$80m build budget",
+          change: "A$1.44–3.68m funding need",
+          exposure: "Contingency + drawdown",
+          decision: "CFO review by Week 1",
+          detail:
+            "Stress-test timing and amount of facility drawdown, contingency balance and development margin under the selected cost range.",
+        },
+        programme: {
+          title: "Programme buffer",
+          type: "PROJECT / milestone test",
+          input: "Target practical completion",
+          change: "+2–8 weeks",
+          exposure: "Handover + settlement dates",
+          decision: "Resequence this week",
+          detail:
+            "Run 2, 6 and 8-week ETA cases. Protect unaffected trades before moving the contractual practical-completion date.",
+        },
+        cost: {
+          title: "Total build-cost scenario",
+          type: "OUTPUT / adverse range",
+          input: "Illustrative A$80m build",
+          change: "+1.8–4.6% = A$1.44–3.68m",
+          exposure: "Project contingency",
+          decision: "Approve cap at Week 2",
+          detail:
+            "Combined range includes freight, cargo cover and material/delay allowance. It is an explicit scenario calculation, not a confirmed forecast.",
+        },
+        actions: {
+          title: "Work-plan decision record",
+          type: "DECISION / traceable",
+          input: "5 named actions",
+          change: "48h → Week 6",
+          exposure: "Procurement, PM, CFO",
+          decision: "Assign owners today",
+          detail:
+            "Every action retains its source, assumptions, owner and due date so the decision can be replayed when carrier or supplier evidence changes.",
+        },
+        finance: {
+          title: "Debt and development margin",
+          type: "FINANCE / covenant test",
+          input: "Illustrative 18% margin",
+          change: "−1.2–3.1pp margin",
+          exposure: "Covenants + equity buffer",
+          decision: "Lender pack Week 1",
+          detail:
+            "Recalculate margin, equity top-up and covenant headroom after the cost range and programme buffer are confirmed.",
+        },
+        supply: {
+          title: "Local supply and rent",
+          type: "CONDITIONAL / market pathway",
+          input: "Completion pipeline",
+          change: "+1–3 months supply timing",
+          exposure: "Rental availability",
+          decision: "Monitor monthly",
+          detail:
+            "A longer-horizon market scenario: delayed completions may defer new supply. It is conditional on project pipeline concentration, not an immediate price forecast.",
+        },
+        buyers: {
+          title: "Buyer settlement timing",
+          type: "CONDITIONAL / customer impact",
+          input: "Off-the-plan contracts",
+          change: "+2–8 weeks settlement",
+          exposure: "Buyer finance expiry",
+          decision: "Customer plan Week 2",
+          detail:
+            "Review finance expiry dates, settlement notices and customer communication if the practical-completion scenario moves.",
+        },
+      };
+      document.querySelectorAll(".node").forEach(
+        (n) =>
+          (n.onclick = () => {
+            document
+              .querySelectorAll(".node")
+              .forEach((x) => x.classList.remove("selected"));
+            n.classList.add("selected");
+            const d = info[n.dataset.node];
+            $("inspector").innerHTML = "<b>Selected map layer:</b> " + d.detail;
+            $("mapTitle").textContent = d.title;
+            $("mapType").textContent = d.type;
+            $("mapInput").textContent = d.input;
+            $("mapChange").textContent = d.change;
+            $("mapExposure").textContent = d.exposure;
+            $("mapDecision").textContent = d.decision;
+          }),
+      );
+      const modal = $("modal");
+      $("cardBtn").onclick = () => modal.classList.add("show");
+      $("close").onclick = $("close2").onclick = () =>
+        modal.classList.remove("show");
+      const qrModal = $("qrModal");
+      $("shareBtn").onclick = async () => {
+        const liveUrl = window.location.href;
+        if (window.location.protocol === "file:") {
+          $("qrMessage").textContent =
+            "Publish this static folder first. A phone cannot open a file:// link from this computer.";
+          $("qrImage").removeAttribute("src");
+          $("qrUrl").textContent = "Use the GitHub Pages URL after publishing.";
+          qrModal.classList.add("show");
+          return;
+        }
+        $("qrMessage").textContent =
+          "Scan to open the same live Realsock demo on a phone.";
+        $("qrImage").src =
+          "https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=" +
+          encodeURIComponent(liveUrl);
+        $("qrUrl").textContent = liveUrl;
+        qrModal.classList.add("show");
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: "Realsock demo", url: liveUrl });
+          } catch (_) {}
+        }
+      };
+      $("qrClose").onclick = () => qrModal.classList.remove("show");
+      document.querySelectorAll("[data-case]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            document
+              .querySelectorAll("[data-case]")
+              .forEach((x) => x.classList.remove("active"));
+            b.classList.add("active");
+            let k = b.dataset.case;
+            if (k === "hormuz") {
+              $("cost").textContent = "+1.8–4.6%";
+              $("delay").textContent = "2–8 weeks";
+              $("readiness").textContent = "62%";
+            }
+            if (k === "trade") {
+              $("cost").textContent = "+1.1–3.4%";
+              $("delay").textContent = "1–6 weeks";
+              $("readiness").textContent = "71%";
+            }
+            if (k === "rates") {
+              $("cost").textContent = "0–0.5%";
+              $("delay").textContent = "0–2 weeks";
+              $("readiness").textContent = "76%";
+            }
+          }),
+      );
+      const visualCases = {
+        hormuz: {
+          impact: "A$1.44m–3.68m",
+          caption: "1.8–4.6% adverse range",
+          freight: "A$0.38–0.95m",
+          insurance: "A$0.18–0.45m",
+          materials: "A$0.88–2.28m",
+          widths: [26, 13, 61],
+          time: "2–8 weeks",
+          buffer: "+7–14 sea days",
+          kpi: "48h",
+          ready: "62%",
+          title: "Focus: adverse case",
+          copy: "Protect handover and re-price imported fittings now.",
+        },
+        trade: {
+          impact: "A$0.88m–2.72m",
+          caption: "1.1–3.4% adverse range",
+          freight: "A$0.31–0.96m",
+          insurance: "A$0.09–0.30m",
+          materials: "A$0.48–1.46m",
+          widths: [35, 11, 54],
+          time: "1–6 weeks",
+          buffer: "+4–10 sea days",
+          kpi: "48h",
+          ready: "71%",
+          title: "Focus: sourcing case",
+          copy: "Compare alternate origin, route and substitution cost.",
+        },
+        rates: {
+          impact: "A$0.00m–0.40m",
+          caption: "0–0.5% direct build range",
+          freight: "A$0.00m",
+          insurance: "A$0.00m",
+          materials: "A$0.00–0.40m",
+          widths: [0, 0, 14],
+          time: "0–2 weeks",
+          buffer: "No sea-route change",
+          kpi: "5 days",
+          ready: "76%",
+          title: "Focus: finance case",
+          copy: "Re-run facility drawdown, buyer finance and presales sensitivity.",
+        },
+      };
+      function renderVisualCase(key) {
+        const d = visualCases[key];
+        $("dollarImpact").textContent = d.impact;
+        $("impactCaption").textContent = d.caption;
+        $("freightValue").textContent = d.freight;
+        $("insuranceValue").textContent = d.insurance;
+        $("materialsValue").textContent = d.materials;
+        $("freightBar").style.width = d.widths[0] + "%";
+        $("insuranceBar").style.width = d.widths[1] + "%";
+        $("materialsBar").style.width = d.widths[2] + "%";
+        $("timeTag").textContent = d.time;
+        $("timeKpi").textContent = d.kpi;
+        $("bufferFact").textContent = d.buffer;
+        $("adverseBar").textContent = $("cost").textContent;
+        $("adverseReady").textContent = d.ready;
+        $("focusTitle").textContent = d.title;
+        $("focusCopy").textContent = d.copy;
+      }
+      document
+        .querySelectorAll("[data-case]")
+        .forEach((b) =>
+          b.addEventListener("click", () => renderVisualCase(b.dataset.case)),
+        );
+    </script>
+  </body>
+</html>
